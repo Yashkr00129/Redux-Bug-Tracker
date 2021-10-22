@@ -1,10 +1,7 @@
 import configureStore from "./store/configureStore";
-import * as actions from "./store/bugs";
+import * as actions from "./store/projects";
 
 const store = configureStore();
 
-store.dispatch(actions.bugAdded("Bug 1 "));
-store.dispatch(actions.bugAdded("Bug 2 "));
-store.dispatch(actions.bugAdded("Bug 3 "));
-store.dispatch(actions.bugResolved(1));
+store.dispatch(actions.projectAdded({ name: "Project 1" }));
 console.log(store.getState());
