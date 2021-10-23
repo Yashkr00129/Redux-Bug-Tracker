@@ -14,5 +14,5 @@ const slice=createSlice({
   },
 })
 export default slice.reducer
-export const {projectAdded}=slice.actions
+export const actions=slice.actions
 

@@ -1,6 +1,7 @@
-import { createAction, createSlice } from "@reduxjs/toolkit";
+import {  createSlice } from "@reduxjs/toolkit";
 
-export default createSlice({ 
+let lastId = 0;
+const bugSlice=createSlice({ 
   name: "bugs",
   initialState: [],
   reducers: {
@@ -17,10 +18,5 @@ export default createSlice({
     },
   },
 });
-
-export const bugAdded = createAction("bugAdded");
-export const bugResolved = createAction("bugResolved");
-export const bugRemoved = createAction("bugRemoved");
-
-// Reducer
-let lastId = 0;
+export default bugSlice.reducer
+export const actions = slice.actions;

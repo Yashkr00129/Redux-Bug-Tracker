@@ -1,7 +1,5 @@
-import configureStore from "./store/configureStore";
-import * as actions from "./store/projects";
-
-const store = configureStore();
+import store from "./store/configureStore";
+import { actions } from "./store/projects";
 
 store.dispatch(actions.projectAdded({ name: "Project 1" }));
 console.log(store.getState());
