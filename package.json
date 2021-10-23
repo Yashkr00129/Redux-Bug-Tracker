@@ -19,6 +19,7 @@
     "immer": "^9.0.6",
     "nodemon": "^2.0.14",
     "redux": "^4.0.0",
-    "redux-devtools-extension": "^2.13.9"
+    "redux-devtools-extension": "^2.13.9",
+    "reselect": "^4.0.0"
   }
 }
