@@ -19,4 +19,4 @@ const bugSlice=createSlice({
   },
 });
 export default bugSlice.reducer
-export const actions = slice.actions;
+export const bugActions = bugSlice.actions;
