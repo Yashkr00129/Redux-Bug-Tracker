@@ -37,13 +37,12 @@ const bugSlice = createSlice({
   },
 });
 export default bugSlice.reducer;
-export const bugActions = bugSlice.actions;
+const bugActions = bugSlice.actions;
 
 // Action Creators
 const url = "/bugs";
 export const loadBugs = () => (dispatch, getState) => {
   const { lastFetch } = getState().entities.bugs;
-  console.log(lastFetch);
   const diffInMinutes = moment().diff(moment(lastFetch), "minutes");
   if (diffInMinutes < 10) return;
   dispatch(
@@ -65,8 +64,6 @@ export const addBug = (bug) =>
 
 export const resolveBug = (id) => {
   apiCallBegan({
-    //  /bugs
-    // PATCH /bugs/1
     url: `${url}/${id}`,
     method: "patch",
     data: { resolved: true },
