@@ -1,6 +1,6 @@
 import store from "./store/configureStore";
-import * as apiActions from "./store/api";
-import { loadBugs } from "./store/bugs"
+import { loadBugs, assignBugToUser } from "./store/bugs";
+const { dispatch } = store;
 
-
-store.dispatch(loadBugs())
+dispatch(loadBugs());
+setTimeout(()=>{dispatch(assignBugToUser(1,4))},2000)

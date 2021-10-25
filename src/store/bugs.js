@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createSelector } from "reselect";
 import { apiCallBegan } from "./api";
+import moment from "moment";
 
-let lastId = 0;
 const bugSlice = createSlice({
   name: "bugs",
   initialState: {
@@ -17,21 +17,17 @@ const bugSlice = createSlice({
     bugsRecieved: (bugs, action) => {
       bugs.list = action.payload;
       bugs.loading = false;
+      bugs.lastFetch = Date.now();
     },
     bugAdded: (bugs, action) => {
-      bugs.list.push({
-        id: ++lastId,
-        description: action.payload.description,
-        resolved: false,
-        userId: false,
-      });
+      bugs.list.push(action.payload);
     },
     bugResolved: (bugs, action) => {
       const index = bugs.list.findIndex((bug) => bug.id === action.payload.id);
       bugs.list[index].resolved = true;
     },
     bugAssigned: (bugs, action) => {
-      const { bugId, userId } = action.payload;
+      const { id:bugId, userId } = action.payload;
       const index = bugs.list.findIndex((bug) => bug.id === bugId);
       bugs.list[index].userId = userId;
     },
@@ -45,12 +41,44 @@ export const bugActions = bugSlice.actions;
 
 // Action Creators
 const url = "/bugs";
-export const loadBugs = () =>
+export const loadBugs = () => (dispatch, getState) => {
+  const { lastFetch } = getState().entities.bugs;
+  console.log(lastFetch);
+  const diffInMinutes = moment().diff(moment(lastFetch), "minutes");
+  if (diffInMinutes < 10) return;
+  dispatch(
+    apiCallBegan({
+      url,
+      onStart: bugActions.bugsRequested.type,
+      onSuccess: bugActions.bugsRecieved.type,
+      onError: bugActions.bugsRequestFailed.type,
+    })
+  );
+};
+export const addBug = (bug) =>
   apiCallBegan({
     url,
-    onStart: bugActions.bugsRequested.type,
-    onSuccess: bugActions.bugsRecieved.type,
-    onError: bugActions.bugsRequestFailed.type,
+    method: "post",
+    data: bug,
+    onSuccess: bugActions.bugAdded.type,
+  });
+
+export const resolveBug = (id) => {
+  apiCallBegan({
+    //  /bugs
+    // PATCH /bugs/1
+    url: `${url}/${id}`,
+    method: "patch",
+    data: { resolved: true },
+    onSuccess: bugActions.bugResolved.type,
+  });
+};
+export const assignBugToUser = (bugId, userId) =>
+  apiCallBegan({
+    url: `${url}/${bugId}`,
+    method: "patch",
+    data: { userId },
+    onSuccess:bugActions.bugAssigned.type
   });
 
 export const getUnresolvedBugs = createSelector(
