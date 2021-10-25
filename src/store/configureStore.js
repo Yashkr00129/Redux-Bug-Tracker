@@ -9,6 +9,5 @@ export default configureStore({
     ...getDefaultMiddleware(),
     logger({ destination: "console" }),
     toastify,
-    api,
   ],
 });
